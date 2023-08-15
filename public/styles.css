@@ -31,14 +31,12 @@ body {
   color: white;
 }
 
-/* Chat main area */
 .chat-main {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
 }
 
-/* Message styling */
 #messages {
   list-style-type: none;
   padding: 0;

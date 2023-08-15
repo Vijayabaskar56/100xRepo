@@ -6,10 +6,9 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-// Serve static files from the "public" directory
+
 app.use(express.static('public'));
 
-// Create a socket connection
 io.on('connection', (socket) => {
     console.log('User connected');
 
@@ -18,7 +17,6 @@ io.on('connection', (socket) => {
         io.emit('chat message', message); // Broadcast the message to all connected clients
     });
 
-    // Handle user disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
