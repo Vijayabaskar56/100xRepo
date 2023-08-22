@@ -32,16 +32,27 @@ document.addEventListener('DOMContentLoaded', () => {
         ['like', '❤️'],
         ['congratulation', '🥳'],
     ]);
+
+    const number = '0123456789';
+    let result = "";
     
     const commandMapping = new Map([
         ['/help', () => {
-            alert("List of Available Commands! \n -/hlep \n -/clear \n -/reload");
+            alert("List of Available Commands! \n -/hlep \n -/clear \n -/reload \n -/random");
         }],
         ['/clear', () => {
             clearMessages();        
         }],
         ['/reload', () => {
             location.reload();
+        }],
+        ['/random', () => {
+            for (let i = 0; i < 10; i++) {
+                const index = Math.floor(Math.random() * number.length)
+                result += number.charAt(index)
+            }
+            socket.emit('chat message', result);
+            result = ''
         }]
     ])
 
@@ -67,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } 
 
     });
+    
 
     socket.on('chat message', (msg) => {
         const li = document.createElement('li');
