@@ -1,5 +1,8 @@
 const socket = io();
 
+const existingContacts = JSON.parse(localStorage.getItem('contacts')) || [];
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,40 +11,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.querySelector('#input');
     const chatContacts = document.querySelector('.chat-contacts');
 
-    const contactName = prompt('Please enter a contact name:');
-    if (contactName) {
+    function updateContactDisplay() {
+    chatContacts.innerHTML = ''; // Clear the existing contact list
+
+    existingContacts.forEach(contact => {
         const contactDiv = document.createElement('div');
         contactDiv.classList.add('contact');
-        contactDiv.textContent = contactName;
+        contactDiv.textContent = contact;
         chatContacts.appendChild(contactDiv);
+    });
 
-        socket.emit('set contact', contactName); // Emit contact name to server
-    }
+    const contactCount = document.querySelector('#contactCount');
+    contactCount.textContent = existingContacts.length.toString();
+}
 
-    function clearMessages() {
-        while (messages.firstChild) {
-            messages.removeChild(messages.firstChild);
-        }
+    const contactName = prompt('Please enter a contact name:');
+    if (contactName) { 
+
+        existingContacts.push(contactName);
+        
+        updateContactDisplay(); 
+
+        localStorage.setItem('contacts', JSON.stringify(existingContacts)); 
+
+        socket.emit('set contact', contactName); 
     }
 
     const emojiMapping = new Map([
-        ['react', '⚛️'],
-        ['woah', '😯'],
-        ['hey', '👋🏼'],
-        ['lol', '😂'],
-        ['like', '❤️'],
-        ['congratulation', '🥳'],
+
+        ['react' || 'React' || 'REACT', '⚛️'],
+        ['woah' || 'Woah' || 'WOAH', '😯'],
+        ['hey' || 'Hey' || 'HEY', '👋🏼'],
+        ['lol' || 'Lol' || 'LOL', '😂'],
+        ['like' || 'Like' || 'LIKE', '❤️'],
+        ['congratulation' || 'Congratulation' || 'CONGRATULATION', '🥳'],
+        ['react:' , 'react'],
+        ['woah:' , 'woah'],
+        ['hey:' ,'hey'],
+        ['lol:', 'lol'],
+        ['like:', 'like'],
+        ['congratulation:', 'congratulation'],
     ]);
+
+    function clearContactsSession() {
+    localStorage.removeItem('contacts'); 
+    existingContacts.length = 0; 
+    updateContactDisplay(); 
+}
+
 
     const number = '0123456789';
     let result = "";
     
     const commandMapping = new Map([
         ['/help', () => {
-            alert("List of Available Commands! \n -/hlep \n -/clear \n -/reload \n -/random");
+            alert("List of Available Commands! \n -/hlep \n -/clear \n -/reload \n -/random \n -/calc \n -rem");
+        }],
+        ['/clearcontact', () => {
+            while (chatContacts.firstChild) {
+            chatContacts.removeChild(chatContacts.firstChild);
+            clearContactsSession();
+        }
         }],
         ['/clear', () => {
-            clearMessages();        
+            while (messages.firstChild) {
+            messages.removeChild(messages.firstChild);
+        }
         }],
         ['/reload', () => {
             location.reload();
@@ -53,6 +88,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             socket.emit('chat message', result);
             result = ''
+        }],
+        ['/rem', (key, value) => {
+            if(key && value) {
+                emojiMapping.set(key, value);
+                alert('Remembered!!')
+            } else if (key) {
+                let value = emojiMapping.get(key);
+                socket.emit('chat message', value);
+                value = '';
+            }
+        }],
+        ['/calc', (numone, operator ,numtwo) => {
+            console.log(numone,numtwo);
+            const one = Number(numone);
+            const two = Number(numtwo);
+            let res;
+            if(operator === '+') {
+                res = one + two;
+            } else if (operator === '-') {
+                res = one - two;
+            } else if (operator === '*') {
+                res = one * two;
+            } else if (operator === '/') {
+                res = one / two;
+            } else if (operator === '%') {
+                res = one % two;
+            }
+            console.log(one,two);
+            res.toString();
+            socket.emit('chat message', res);
+            rum = ''
         }]
     ])
 
@@ -61,22 +127,34 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         const sentence = input.value.trim().toLowerCase();
-        let cmd = commandMapping.get(sentence)
-        console.log(cmd);
         const words = sentence.split(' ');
+        
+        if(words.length > 0) {
+            var firstWord = words[0];
+            var secondword = words[1];
+            var thirdword = words[2];
+            var fourthword = words[3];
+            console.log(firstWord, secondword, thirdword,fourthword);
+        }
 
+
+        let cmd;
+            
+        cmd = commandMapping.get(firstWord)
 
         let msg = words.map(word => emojiMapping.get(word) || word).join(' ')
-
         if(cmd) {
-            cmd();
+            if(firstWord === '/calc') {
+                cmd(secondword, thirdword, fourthword);
+            } else
+            cmd(secondword, thirdword);
             input.value = '';
         }
         else if (msg !== '') {
             socket.emit('chat message', msg);
+
             input.value = '';
         } 
-
     });
     
 

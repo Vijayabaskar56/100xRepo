@@ -83,11 +83,25 @@ button {
   /* margin-bottom: 5px; */
 }
 
+.info {
+  width: 93%;
+  height: 25%;
+  text-align:start;
+  padding: 0px 10px;
+  color: white;
+  background-color: #073e5e;
+}
+
+.info p em {
+  color: aqua;
+  font-style: italic;
+}
+
 /* contact */
 .chat-contacts {
   text-align: center;
   padding: 5px;
-  margin-bottom: 10px;
+  margin: 10px;
   cursor: pointer;
   background-color: rgb(26, 33, 53);
   color: #ccc;
@@ -99,7 +113,20 @@ button {
 }
 
 .contact {
-  margin-bottom: 10px;
+  margin: 10px;
+  padding: 10px;
   cursor: pointer;
 }
 
+#contactCount {
+  text-align: center;
+  position: absolute;
+  top: 5;
+  left: 0;
+  width: 40px;
+  padding: 5px;
+  margin: 10px;
+  cursor: pointer;
+  background-color: rgb(101, 129, 206);
+  color: #ccc;
+}

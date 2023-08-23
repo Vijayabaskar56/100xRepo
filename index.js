@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-const contacts = []; // Array to store contact names
+const contacts = [];
 
 io.on('connection', (socket) => {
     console.log('A user connected');
