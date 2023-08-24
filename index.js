@@ -22,8 +22,7 @@ io.on("connection", (socket) => {
     contact.push(contactName);
     io.emit("contacts update", contact);
     io.emit("user count", contact.length);
-    const index = contact.indexOf(contactName);
-    console.log(contact.length, index);
+    io.emit("set header", contactName);
   });
 
   socket.on("chat message", (msg) => {

@@ -10,26 +10,23 @@
     <div class="chat-container">
       <div class="chat-sidebar">
         <div class="chat-header">
-          <h1>100x chat</h1>
+          <h1>let's chat</h1>
+          <button id="leave-chat">Leave =></button>
         </div>
-        <h3>Contact List</h3>
-        <div class="chat-contacts">
-          <!-- List of contacts goes here -->
-        </div>
-        <p>Online Users: <span id="userCount">0</span></p>
-        <!-- <div class="contact">
-          Contact Counter:
-          <div id="contactCount">0</div>
-        </div> -->
+        <h3 class="title">Contact List</h3>
+        <div class="chat-contacts"></div>
+        <p class="userCount">Online Users: <span id="userCount">0</span></p>
       </div>
-      <div class="chat-main">
-        <div class="chat-header">
-          <h2>Room Debian</h2>
+      <div class="main-chat">
+        <div id="header"></div>
+        <div class="chat-main">
+          <ul id="messages"></ul>
+          <form id="form" action="">
+            <input id="input" placeholder="/help" autocomplete="off" /><button>
+              Send
+            </button>
+          </form>
         </div>
-        <ul id="messages"></ul>
-        <form id="form" action="">
-          <input id="input" autocomplete="off" /><button>Send</button>
-        </form>
       </div>
     </div>
 

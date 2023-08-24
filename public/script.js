@@ -5,14 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const chatContacts = document.querySelector(".chat-contacts");
+  const leavechat = document.querySelector("#leave-chat");
 
-  alert(
-    " - type /help to see the list of available commands \n - list of icons that can switch : \n -React, \n -Woah, \n -Lol, \n -Like, \n -Hey, \n -Congratulation \n type iconname + : to bypass the icon switch (eg:- react:)"
-  );
   const contactName = prompt("Please enter a contact name:");
   if (contactName) {
     const contactDiv = document.createElement("div");
     contactDiv.classList.add("contact");
+    // contactDiv.style.backgroundColor = getRandomColor();
     contactDiv.textContent = contactName;
     chatContacts.appendChild(contactDiv);
 
@@ -20,6 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.on("user count", (count) => {
       const contactCount = document.querySelector("#userCount");
       contactCount.textContent = count;
+    });
+    socket.on("set header", (contactName) => {
+      const header = document.querySelector("#header");
+      header.textContent = contactName;
+      messages.appendChild(header);
     });
   }
 
@@ -44,15 +48,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updateContactDisplay();
   }
 
-  const number = "0123456789";
-  let result = "";
-
   const commandMapping = new Map([
     [
       "/help",
       () => {
         alert(
-          "List of Available Commands! \n \n -/clear: Clear the Chat \n -/reload: Reload the Page \n -/random: Provide a Randome Numbers \n -/calc: Calculator \n -rem: remeber and Retrive words (eg:- /rem key value)\n we can revtrive the value by using the key \n -clearcontact: Clear the Contact"
+          "List of Available Commands! \n \n -/clear: Clear the Chat \n -/reload: Reload the Page \n -/random: Generate Random Number \n -/calc: Calculator \n -rem: <key> <word>\n we can revtrive the value by using the key \n -clearcontact: Clear the Contact"
         );
       },
     ],
@@ -82,11 +83,14 @@ document.addEventListener("DOMContentLoaded", () => {
     [
       "/random",
       () => {
+        const number = "0123456789";
+        let result = "";
         for (let i = 0; i < 10; i++) {
           const index = Math.floor(Math.random() * number.length);
           result += number.charAt(index);
         }
-        socket.emit("chat message", result);
+        random = `${contactName} : ${result}`;
+        socket.emit("chat message", random);
       },
     ],
     [
@@ -97,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
           emojiMapping.set(key, value);
           alert("Remembered!!");
         } else if (key) {
-          let value = `The remembered word for ${key}  is ${emojiMapping.get(
+          let value = `${contactName} : The remembered word for ${key}  is ${emojiMapping.get(
             key
           )}`;
           socket.emit("chat message", value);
@@ -108,12 +112,17 @@ document.addEventListener("DOMContentLoaded", () => {
     [
       "/calc",
       (input) => {
-        let output = `The answer is = ${eval(input)}`;
+        let output = `${contactName} : ${input} = ${eval(input)}`;
         socket.emit("chat message", output);
         output = "";
       },
     ],
   ]);
+
+  leavechat.addEventListener("click", () => {
+    //    commandMapping.get("/reload");
+    location.reload();
+  });
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -130,7 +139,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cmd = commandMapping.get(firstWord);
 
-    let msg = words.map((word) => emojiMapping.get(word) || word).join(" ");
+    let msg = `${contactName}: ${words
+      .map((word) => emojiMapping.get(word) || word)
+      .join(" ")}`;
     if (cmd) {
       if (firstWord === "/calc") {
         cmd(secondword);
@@ -138,7 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
       input.value = "";
     } else if (msg !== "") {
       socket.emit("chat message", msg);
-
       input.value = "";
     }
   });
@@ -147,5 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const li = document.createElement("li");
     li.textContent = msg;
     messages.appendChild(li);
+    const chatContainer = document.querySelector(".chat-main");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
   });
 });
