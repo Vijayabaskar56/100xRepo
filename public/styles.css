@@ -116,3 +116,6 @@ button {
   background-color: rgb(101, 129, 206);
   color: #ccc;
 }
+
+@media (max-width: 400px) {
+}
