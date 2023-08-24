@@ -83,20 +83,6 @@ button {
   /* margin-bottom: 5px; */
 }
 
-.info {
-  width: 93%;
-  height: 25%;
-  text-align:start;
-  padding: 0px 10px;
-  color: white;
-  background-color: #073e5e;
-}
-
-.info p em {
-  color: aqua;
-  font-style: italic;
-}
-
 /* contact */
 .chat-contacts {
   text-align: center;
@@ -109,7 +95,7 @@ button {
 
 .chat-contacts:hover {
   background-color: #f2f2f2;
-  color:#000000;
+  color: #000000;
 }
 
 .contact {
