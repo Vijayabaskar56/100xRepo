@@ -1,35 +1,16 @@
 const socket = io();
 
-// const existingContacts = JSON.parse(localStorage.getItem("contacts")) || [];
-
 document.addEventListener("DOMContentLoaded", () => {
   const messages = document.querySelector("#messages");
   const form = document.querySelector("#form");
   const input = document.querySelector("#input");
   const chatContacts = document.querySelector(".chat-contacts");
 
-  // function updateContactDisplay() {
-  // chatContacts.innerHTML = ""; // Clear the existing contact list
-
-  // existingContacts.forEach((contact) => {
-  // const contactDiv = document.createElement("div");
-  // contactDiv.classList.add("contact");
-  // contactDiv.textContent = contact;
-  // chatContacts.appendChild(contactDiv);
-  // });
-
-  // socket.on("user count", (count) => {
-  //   const contactCount = document.querySelector("#userCount");
-  //   contactCount.textContent = count;
-  // });
-  // }
-
   alert(
     " - type /help to see the list of available commands \n - list of icons that can switch : \n -React, \n -Woah, \n -Lol, \n -Like, \n -Hey, \n -Congratulation \n type iconname + : to bypass the icon switch (eg:- react:)"
   );
   const contactName = prompt("Please enter a contact name:");
   if (contactName) {
-    // existingContacts.push(contactName);
     const contactDiv = document.createElement("div");
     contactDiv.classList.add("contact");
     contactDiv.textContent = contactName;
@@ -40,10 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const contactCount = document.querySelector("#userCount");
       contactCount.textContent = count;
     });
-
-    // updateContactDisplay();
-
-    // localStorage.setItem("contacts", JSON.stringify(existingContacts));
   }
 
   const emojiMapping = new Map([
@@ -147,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
       var firstWord = words[0];
       var secondword = words[1];
       var thirdword = words[2];
-      // var fourthword = words[3];
     }
 
     let cmd;
@@ -156,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let msg = words.map((word) => emojiMapping.get(word) || word).join(" ");
     if (cmd) {
-      // cmd(secondword, thirdword, fourthword);
       if (firstWord === "/calc") {
         cmd(secondword);
       } else cmd(secondword, thirdword);
