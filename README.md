@@ -1,6 +1,6 @@
-# Simple Chat app built using ChatGPT
+# Simple Chat app built
 
-Prompt used: Please write a simple chat app using Node.js and Socket.io
+View the Deployed App on Render => https://chat-app-100x.onrender.com
 
 ## Basic Setup
 Express.js for the server, Socket.io for real-time communication, and plain HTML, CSS, and JavaScript for the front end.
@@ -40,4 +40,3 @@ the following words with be replaced with emojis:
 ## Contact's and Online user's will updated in real time.
 
 
-## 
